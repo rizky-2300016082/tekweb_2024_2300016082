@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>To-Do App</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        .container {
+            width: 350px;
+            margin: 0 auto;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #taskList {
+            list-style: none;
+            padding: 0;
+        }
+
+        #taskList li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close {
+            color: red;
+            cursor: pointer;
+        }
+
+        #controls {
+            margin: 20px 0;
+        }
+
+        .control-button {
+            padding: 5px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>My To-Do List</h2>
+        <input type="text" id="newTask" placeholder="Add a new task...">
+        <button onclick="addTask()">Add</button>
+        <h5>Doubel click to edit</h5>
+
+        <ul id="taskList"></ul>
+
+        
+        <div id="controls">
+            <select id="bgColorSelect" onchange="changeBackgroundColor()">
+                <option value="">Select Background Color</option>
+                <option value="lightblue">Light Blue</option>
+                <option value="lightgreen">Light Green</option>
+                <option value="lightpink">Light Pink</option>
+            </select>
+
+            <button class="control-button" onclick="increaseFontSize()">Increase Font Size</button>
+            <button class="control-button" onclick="decreaseFontSize()">Decrease Font Size</button>
+            <button class="control-button" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+            <button class="control-button" onclick="changeFontStyle()">Change Font Style</button>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk menambahkan tugas baru ke daftar
+        function addTask() {
+            const taskInput = document.getElementById("newTask");
+            const taskList = document.getElementById("taskList");
+
+            if (taskInput.value.trim() === "") {
+                alert("Please enter a task.");
+                return;
+            }
+
+            const li = document.createElement("li");
+            li.textContent = taskInput.value;
+
+            li.ondblclick = function () {
+                editTask(this);
+            };
+
+            const closeBtn = document.createElement("span");
+            closeBtn.textContent = "×";
+            closeBtn.className = "close";
+            closeBtn.onclick = function () {
+                deleteTask(this);
+            };
+
+            li.appendChild(closeBtn);
+            taskList.appendChild(li);
+            taskInput.value = "";
+        }
+
+        // Fungsi untuk menghapus tugas yang dipilih
+        function deleteTask(element) {
+            const task = element.parentElement;
+            task.remove();
+        }
+
+        // Fungsi untuk mengedit tugas dengan klik dua kali
+        function editTask(element) {
+            const newTask = prompt("Edit your task:", element.firstChild.textContent);
+            if (newTask !== null && newTask.trim() !== "") {
+                element.firstChild.textContent = newTask;
+            }
+        }
+
+        // Fungsi untuk mengubah warna latar belakang
+        function changeBackgroundColor() {
+            const color = document.getElementById("bgColorSelect").value;
+            document.body.style.backgroundColor = color;
+        }
+
+        // Fungsi untuk memperbesar ukuran font
+        function increaseFontSize() {
+            document.body.style.fontSize = 'larger';
+        }
+
+        // Fungsi untuk memperkecil ukuran font
+        function decreaseFontSize() {
+            document.body.style.fontSize = 'smaller';
+        }
+
+        // Fungsi untuk mengaktifkan mode gelap
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+            const isDark = document.body.classList.contains("dark-mode");
+            document.body.style.backgroundColor = isDark ? "#333" : "";
+            document.body.style.color = isDark ? "#fff" : "";
+        }
+
+        // Fungsi untuk mengubah gaya font
+        function changeFontStyle() {
+            const fontStyles = ["Arial", "Courier New", "Georgia", "Times New Roman", "Verdana"];
+            const currentFont = document.body.style.fontFamily;
+            const currentIndex = fontStyles.indexOf(currentFont);
+            const nextIndex = (currentIndex + 1) % fontStyles.length;
+            document.body.style.fontFamily = fontStyles[nextIndex];
+        }
+    </script>
+</body>
+
+</html>
